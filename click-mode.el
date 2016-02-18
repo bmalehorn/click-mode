@@ -5,7 +5,7 @@
 ;; license that can be found in the LICENSE.txt file.
 
 ;; Author: Brian Malehorn <bmalehorn@gmail.com>
-;; Version: 0.0.1
+;; Version: 0.0.2
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: click router
 ;; URL: https://github.com/bmalehorn/click-mode
@@ -40,6 +40,73 @@ We also include
 
 ...Script arguments, since those are typically non-capitalized."
   )
+
+(defun click-indent-line ()
+  "\"Correct\" the indentation for the current line."
+  (save-excursion
+    (let* ((line (click-what-line))
+           (changer (click-previous-indentation line)))
+      (or (click-indent-copycat line changer "\\[")
+          (click-indent-copycat line changer "->")
+          (click-indent-copycat line changer "=>")))))
+
+(defun click-indent-copycat (line changer regexp)
+  "Indent the same as the previous line.
+e.g. (click-indent-copycat 1 2 [) will indent this:
+
+1:    => ( [0] -> foo;
+2:      [1] -> bar; )
+
+to this:
+
+1:    => ( [0] -> foo;
+2:         [1] -> bar; )
+
+If the line with different indentation does not contain REGEXP,
+returns nil. Otherwise, returns the new indentation.
+
+"
+  (save-excursion
+    (back-to-indentation)
+    (when (and (looking-at regexp)
+               (progn
+                 (goto-line changer)
+                 (back-to-indentation)
+                 (looking-at (concat ".*" regexp))))
+      (while (not (looking-at regexp))
+        (forward-char))
+      (let* ((bracket (point))
+             (bol (progn (beginning-of-line) (point)))
+             (indent (- bracket bol)))
+        (goto-line line)
+        (indent-line-to indent)
+        indent))))
+
+(defun click-previous-indentation (line)
+  "
+1:    foo {
+2:        bar;
+3:        ack;
+4:    }
+
+(click-previous-indentation 3) => 1
+"
+  (save-excursion
+    (goto-line line)
+    (let* ((indentation (current-indentation)))
+      (while (and (<= indentation (current-indentation)) (not (bobp)))
+        (next-line -1))
+      (click-what-line))))
+
+(defun click-what-line ()
+  "Returns the current line."
+  (save-excursion
+    (beginning-of-line)
+    (+ 1 (count-lines 1 (point)))))
+
+(defvar click-basic-offset 4
+  "How many spaces to \"correct\" indentation to.
+Analogous to `c-basic-offset'.")
 
 (defvar click-highlights
   `(
@@ -105,6 +172,7 @@ We also include
   (setq comment-start "// ")
   (setq comment-start-skip "//+\\s-*")
   (set-syntax-table click-mode-syntax-table)
+  (set (make-local-variable 'indent-line-function) 'click-indent-line)
   (setq font-lock-defaults '(click-highlights)))
 
 ;;;###autoload
