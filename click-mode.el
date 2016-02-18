@@ -5,29 +5,19 @@
 
 ;; http://read.cs.ucla.edu/click/click
 
-;;;###autoload
-(define-derived-mode click-mode fundamental-mode
-  (setq comment-start "// ")
-  (setq comment-start-skip "//+\\s-*")
-  (set-syntax-table click-mode-syntax-table)
-  (setq font-lock-defaults '(click-highlights))
-  (setq mode-name "Click"))
-
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.click\\'" . click-mode))
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.template\\'" . click-mode))
-
 ;; pilfered from https://www.emacswiki.org/emacs/wpdl-mode.el
 (defvar click-mode-syntax-table
   (let ((click-mode-syntax-table (make-syntax-table)))
-    (modify-syntax-entry ?_ "w" click-mode-syntax-table)
-    (modify-syntax-entry ?/ ". 124b" click-mode-syntax-table)
-    (modify-syntax-entry ?* ". 23" click-mode-syntax-table)
-    (modify-syntax-entry ?\n "> b" click-mode-syntax-table)
-    click-mode-syntax-table)
-  "Syntax table for `click-mode'."
-  )
+
+    ; This is added so entity names with underscores can be more easily parsed
+        (modify-syntax-entry ?_ "w" click-mode-syntax-table)
+
+        ; Comment styles are same as C++
+        (modify-syntax-entry ?/ ". 124b" click-mode-syntax-table)
+        (modify-syntax-entry ?* ". 23" click-mode-syntax-table)
+        (modify-syntax-entry ?\n "> b" click-mode-syntax-table)
+        click-mode-syntax-table)
+  "Syntax table for `click-mode'.")
 
 (defvar click-arguments
   "[A-Z][A-Z_0-9]*\\|init\\|setq\\|set\\|writeq\\|write\\|goto\\|label\\|end"
@@ -92,7 +82,7 @@ We also include
      . (1 font-lock-constant-face))
     ;; ACTIVE false,
     (,(concat
-       "^\\s-*\\(" click-arguments "\\) .*\\(,\\|);?\\)$")
+       "^\\s-*\\(" click-arguments "\\) .*\\(,\\|);?\\) *$")
      . (1 font-lock-constant-face))
     )
 
@@ -100,6 +90,18 @@ We also include
   )
 
 
+;;;###autoload
+(define-derived-mode click-mode fundamental-mode
+  (setq comment-start "// ")
+  (setq comment-start-skip "//+\\s-*")
+  (set-syntax-table click-mode-syntax-table)
+  (setq font-lock-defaults '(click-highlights))
+  (setq mode-name "Click"))
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.click\\'" . click-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.template\\'" . click-mode))
+
 (provide 'click-mode)
 ;;; click-mode.el ends here
-
