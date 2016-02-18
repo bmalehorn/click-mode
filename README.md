@@ -13,3 +13,7 @@
 ```
 
 3. Open a .click file and enjoy!
+
+# Screenshots
+
+![Screenshot](https://github.com/bmalehorn/click-mode/raw/master/example.png)
