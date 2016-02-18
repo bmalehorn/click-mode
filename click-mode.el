@@ -23,14 +23,14 @@
 (defvar click-mode-syntax-table
   (let ((click-mode-syntax-table (make-syntax-table)))
 
-    ; This is added so entity names with underscores can be more easily parsed
-        (modify-syntax-entry ?_ "w" click-mode-syntax-table)
+    ;; This is added so entity names with underscores can be more easily parsed
+    (modify-syntax-entry ?_ "w" click-mode-syntax-table)
 
-        ; Comment styles are same as C++
-        (modify-syntax-entry ?/ ". 124b" click-mode-syntax-table)
-        (modify-syntax-entry ?* ". 23" click-mode-syntax-table)
-        (modify-syntax-entry ?\n "> b" click-mode-syntax-table)
-        click-mode-syntax-table)
+    ;; Comment styles are same as C++
+    (modify-syntax-entry ?/ ". 124b" click-mode-syntax-table)
+    (modify-syntax-entry ?* ". 23" click-mode-syntax-table)
+    (modify-syntax-entry ?\n "> b" click-mode-syntax-table)
+    click-mode-syntax-table)
   "Syntax table for `click-mode'.")
 
 (defvar click-arguments
@@ -105,17 +105,15 @@ We also include
 
 
 ;;;###autoload
-(define-derived-mode click-mode fundamental-mode
+(define-derived-mode click-mode fundamental-mode "Click"
   (setq comment-start "// ")
   (setq comment-start-skip "//+\\s-*")
   (set-syntax-table click-mode-syntax-table)
-  (setq font-lock-defaults '(click-highlights))
-  (setq mode-name "Click"))
+  (setq font-lock-defaults '(click-highlights)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.click\\'" . click-mode))
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.template\\'" . click-mode))
+
 
 (provide 'click-mode)
 
