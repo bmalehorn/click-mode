@@ -1,3 +1,6 @@
+// Take from the Click modular router,
+// http://www.read.cs.ucla.edu/click/examples/fromhost-tunnel.click
+
 // fromhost-tunnel.click
  
 // This configuration demonstrates the use of FromHost, by tunneling all
