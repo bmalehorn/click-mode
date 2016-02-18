@@ -48,7 +48,7 @@ We also include
     ;; elementclass
     (,(concat
        "\\(^\\|[^a-zA-Z_0-9.]\\)\\("
-       "elementclass\\|output\\|input"
+       "elementclass\\|output\\|input\\|require"
        "\\)\\([^a-zA-Z_0-9.]\\|$\\)")
      . (2 font-lock-keyword-face))
     ;; Foo(
