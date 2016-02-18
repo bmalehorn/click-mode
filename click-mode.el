@@ -12,9 +12,12 @@
 
 ;; This file is not part of Emacs.
 
-;;; Code:
 
-;; http://read.cs.ucla.edu/click/click
+;;; Commentary:
+
+;; See https://github.com/bmalehorn/click-mode for more.
+
+;;; Code:
 
 ;; pilfered from https://www.emacswiki.org/emacs/wpdl-mode.el
 (defvar click-mode-syntax-table
