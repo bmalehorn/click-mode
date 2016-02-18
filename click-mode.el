@@ -22,10 +22,6 @@
 ;; pilfered from https://www.emacswiki.org/emacs/wpdl-mode.el
 (defvar click-mode-syntax-table
   (let ((click-mode-syntax-table (make-syntax-table)))
-
-    ;; This is added so entity names with underscores can be more easily parsed
-    (modify-syntax-entry ?_ "w" click-mode-syntax-table)
-
     ;; Comment styles are same as C++
     (modify-syntax-entry ?/ ". 124b" click-mode-syntax-table)
     (modify-syntax-entry ?* ". 23" click-mode-syntax-table)
