@@ -1,7 +1,18 @@
 ;;; click-mode.el --- Major mode for the Click Modular Router Project
 
-;; Syntax highlighting for Click templates.
-;; See ./example.click for all possible syntax.
+;; Copyright (c) 2016 Brian Malehorn. All rights reserved.
+;; Use of this source code is governed by a MIT-style
+;; license that can be found in the LICENSE.txt file.
+
+;; Author: Brian Malehorn <bmalehorn@gmail.com>
+;; Version: 0.0.1
+;; Package-Requires: ()
+;; Keywords: click router
+;; URL: https://github.com/bmalehorn/click-mode
+
+;; This file is not part of Emacs.
+
+;;; Code:
 
 ;; http://read.cs.ucla.edu/click/click
 
@@ -104,4 +115,5 @@ We also include
 (add-to-list 'auto-mode-alist '("\\.template\\'" . click-mode))
 
 (provide 'click-mode)
+
 ;;; click-mode.el ends here
