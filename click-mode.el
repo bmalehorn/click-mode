@@ -6,7 +6,7 @@
 
 ;; Author: Brian Malehorn <bmalehorn@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ()
+;; Package-Requires: ((emacs "24"))
 ;; Keywords: click router
 ;; URL: https://github.com/bmalehorn/click-mode
 
@@ -105,7 +105,7 @@ We also include
 
 
 ;;;###autoload
-(define-derived-mode click-mode fundamental-mode "Click"
+(define-derived-mode click-mode prog-mode "Click"
   (setq comment-start "// ")
   (setq comment-start-skip "//+\\s-*")
   (set-syntax-table click-mode-syntax-table)
