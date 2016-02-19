@@ -74,7 +74,7 @@ returns nil. Otherwise, returns the new indentation.
     (when (and (< 1 (click-what-line))
                (looking-at regexp)
                (progn
-                 (forward-line -1)
+                 (click-previous-interesting-line)
                  (back-to-indentation)
                  (looking-at (concat ".*" regexp))))
       (while (not (looking-at regexp))
@@ -91,6 +91,20 @@ returns nil. Otherwise, returns the new indentation.
   (save-excursion
     (beginning-of-line)
     (+ 1 (count-lines 1 (point)))))
+
+(defun click-previous-interesting-line ()
+  "Moves the point back until reaching a line, skipping blank lines and
+comment lines."
+  (forward-line -1)
+  (while (and (click-comment-or-blank) (not (bobp)))
+    (forward-line -1)))
+
+(defun click-comment-or-blank ()
+  (save-excursion
+    (back-to-indentation)
+    (or
+     (looking-at "$")
+     (looking-at "//"))))
 
 (defvar click-basic-offset 4
   "How many spaces to \"correct\" indentation to.
