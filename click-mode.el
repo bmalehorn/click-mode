@@ -43,14 +43,17 @@ We also include
 
 (defun click-indent-line ()
   "\"Correct\" the indentation for the current line."
-  (save-excursion
-    (let* ((line (click-what-line))
-           (changer (click-previous-indentation line)))
-      (or (click-indent-copycat line changer "\\[")
-          (click-indent-copycat line changer "->")
-          (click-indent-copycat line changer "=>")))))
+  (and
+   (save-excursion
+     (let* ((line (click-what-line))
+            (changer (click-previous-indentation line)))
+       (or (click-indent-copycat "\\[")
+           (click-indent-copycat "->")
+           (click-indent-copycat "=>"))))
+   (< (current-column) (current-indentation))
+   (back-to-indentation)))
 
-(defun click-indent-copycat (line changer regexp)
+(defun click-indent-copycat (regexp)
   "Indent the same as the previous line.
 e.g. (click-indent-copycat 1 2 [) will indent this:
 
@@ -68,9 +71,10 @@ returns nil. Otherwise, returns the new indentation.
 "
   (save-excursion
     (back-to-indentation)
-    (when (and (looking-at regexp)
+    (when (and (< 1 (click-what-line))
+               (looking-at regexp)
                (progn
-                 (goto-line changer)
+                 (forward-line -1)
                  (back-to-indentation)
                  (looking-at (concat ".*" regexp))))
       (while (not (looking-at regexp))
@@ -78,25 +82,9 @@ returns nil. Otherwise, returns the new indentation.
       (let* ((bracket (point))
              (bol (progn (beginning-of-line) (point)))
              (indent (- bracket bol)))
-        (goto-line line)
+        (forward-line)
         (indent-line-to indent)
         indent))))
-
-(defun click-previous-indentation (line)
-  "
-1:    foo {
-2:        bar;
-3:        ack;
-4:    }
-
-(click-previous-indentation 3) => 1
-"
-  (save-excursion
-    (goto-line line)
-    (let* ((indentation (current-indentation)))
-      (while (and (<= indentation (current-indentation)) (not (bobp)))
-        (next-line -1))
-      (click-what-line))))
 
 (defun click-what-line ()
   "Returns the current line."
