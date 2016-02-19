@@ -45,13 +45,11 @@ We also include
   "\"Correct\" the indentation for the current line."
   (and
    (save-excursion
-     (let* ((line (click-what-line))
-            (changer (click-previous-indentation line)))
-       (or (click-indent-copycat "\\[")
-           (click-indent-copycat "->")
-           (click-indent-copycat "=>"))))
-   (< (current-column) (current-indentation))
-   (back-to-indentation)))
+     (or (click-indent-copycat "\\[")
+         (click-indent-copycat "->")
+         (click-indent-copycat "=>"))))
+  (< (current-column) (current-indentation))
+  (back-to-indentation))
 
 (defun click-indent-copycat (regexp)
   "Indent the same as the previous line.
@@ -71,7 +69,7 @@ returns nil. Otherwise, returns the new indentation.
 "
   (save-excursion
     (back-to-indentation)
-    (when (and (< 1 (click-what-line))
+    (when (and (not (bobp))
                (looking-at regexp)
                (progn
                  (click-previous-interesting-line)
@@ -85,12 +83,6 @@ returns nil. Otherwise, returns the new indentation.
         (forward-line)
         (indent-line-to indent)
         indent))))
-
-(defun click-what-line ()
-  "Returns the current line."
-  (save-excursion
-    (beginning-of-line)
-    (+ 1 (count-lines 1 (point)))))
 
 (defun click-previous-interesting-line ()
   "Moves the point back until reaching a line, skipping blank lines and
