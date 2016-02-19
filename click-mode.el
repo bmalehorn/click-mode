@@ -43,13 +43,16 @@ We also include
 
 (defun click-indent-line ()
   "\"Correct\" the indentation for the current line."
-  (and
-   (save-excursion
-     (or (click-indent-copycat "\\[")
-         (click-indent-copycat "->")
-         (click-indent-copycat "=>"))))
-  (< (current-column) (current-indentation))
-  (back-to-indentation))
+  (when
+      (and
+       (save-excursion
+         (back-to-indentation)
+         (or (when (looking-at "#") (indent-line-to 0) t)
+             (click-indent-copycat "\\[")
+             (click-indent-copycat "->")
+             (click-indent-copycat "=>")))
+       (< (current-column) (current-indentation)))
+    (back-to-indentation)))
 
 (defun click-indent-copycat (regexp)
   "Indent the same as the previous line.
