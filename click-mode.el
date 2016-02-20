@@ -95,8 +95,15 @@ returns nil. Otherwise, returns the new indentation.
   "Moves the point back until reaching a line, skipping blank lines and
 comment lines."
   (forward-line -1)
-  (while (and (click-comment-or-blank) (not (bobp)))
-    (forward-line -1)))
+  (while (and (click-boring-line) (not (bobp)))
+    (forward-line -1))
+  (end-of-line)
+  (forward-char -1)
+  (while (looking-at "[; ]")
+    (forward-char -1))
+  (when (looking-at "[})]\\|]")
+    (end-of-line)
+    (backward-list)))
 
 (defun click-comment-or-blank ()
   (save-excursion
