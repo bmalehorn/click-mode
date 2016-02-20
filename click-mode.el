@@ -102,6 +102,7 @@ comment lines."
   (save-excursion
     (back-to-indentation)
     (or
+     (looking-at "#")
      (looking-at "$")
      (looking-at "//"))))
 
