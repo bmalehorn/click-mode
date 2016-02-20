@@ -47,7 +47,7 @@ We also include
       (and
        (save-excursion
          (back-to-indentation)
-         (or (when (looking-at "#") (indent-line-to 0) t)
+         (or (when (looking-at "#\\|elementclass") (indent-line-to 0) t)
              (click-indent-copycat "\\[")
              (click-indent-copycat "->")
              (click-indent-copycat "=>")))
