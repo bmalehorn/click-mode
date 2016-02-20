@@ -5,7 +5,7 @@
 ;; license that can be found in the LICENSE.txt file.
 
 ;; Author: Brian Malehorn <bmalehorn@gmail.com>
-;; Version: 0.0.2
+;; Version: 0.0.3
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: click router
 ;; URL: https://github.com/bmalehorn/click-mode
@@ -43,19 +43,18 @@ We also include
 
 (defun click-indent-line ()
   "\"Correct\" the indentation for the current line."
-  (when
-      (and
-       (save-excursion
-         (back-to-indentation)
-         (or (when (looking-at "#\\|elementclass") (indent-line-to 0) t)
-             (click-indent-copycat "\\[")
-             (click-indent-copycat "->")
-             (click-indent-copycat "=>")
-             (indent-line-to (save-excursion
-                               (click-previous-interesting-line)
-                               (current-indentation)))))
-
-       (< (current-column) (current-indentation)))
+  (save-excursion
+    (back-to-indentation)
+    (or (when (looking-at "#\\|elementclass") (indent-line-to 0) t)
+        (click-indent-copycat "\\[")
+        (click-indent-copycat "->")
+        (click-indent-copycat "=>")
+        (click-indent-paren)
+        (indent-line-to (save-excursion
+                          (click-previous-interesting-line)
+                          (current-indentation)))))
+        ;; ))
+  (when (< (current-column) (current-indentation))
     (back-to-indentation)))
 
 (defun click-indent-copycat (regexp)
@@ -74,22 +73,23 @@ If the line with different indentation does not contain REGEXP,
 returns nil. Otherwise, returns the new indentation.
 
 "
-  (save-excursion
-    (back-to-indentation)
-    (when (and (not (bobp))
-               (looking-at regexp)
-               (progn
-                 (click-previous-interesting-line)
-                 (back-to-indentation)
-                 (looking-at (concat ".*" regexp))))
-      (while (not (looking-at regexp))
-        (forward-char))
-      (let* ((bracket (point))
-             (bol (progn (beginning-of-line) (point)))
-             (indent (- bracket bol)))
-        (forward-line)
-        (indent-line-to indent)
-        indent))))
+  (let* ((indent
+          (save-excursion
+            (back-to-indentation)
+            (when (and (not (bobp))
+                       (looking-at regexp)
+                       (progn
+                         (click-previous-interesting-line)
+                         (back-to-indentation)
+                         (looking-at (concat ".*" regexp))))
+              (while (not (looking-at regexp))
+                (forward-char))
+              (let* ((bracket (point))
+                     (bol (progn (beginning-of-line) (point))))
+                     (- bracket bol))))))
+    (when indent
+      (indent-line-to indent)
+      indent)))
 
 (defun click-previous-interesting-line ()
   "Moves the point back until reaching a line, skipping blank lines and
@@ -105,13 +105,67 @@ comment lines."
     (end-of-line)
     (backward-list)))
 
-(defun click-comment-or-blank ()
+(defun click-boring-line ()
   (save-excursion
     (back-to-indentation)
     (or
      (looking-at "#")
      (looking-at "$")
      (looking-at "//"))))
+
+(defun click-indent-paren ()
+  "
+
+Idents:
+
+      foo (
+      bar
+
+to:
+
+      foo (
+          bar
+
+"
+  (let* ((indent
+          (save-excursion
+            (let* ((this-paren-count (click-paren-count))
+                   (previous-paren-count
+                    (progn
+                      (click-previous-interesting-line)
+                      (click-paren-count)))
+                   (previous-indent (current-indentation)))
+              (if (< this-paren-count 0)
+                  ;; bar)
+                  ;; indent to the same indentation as the matching )
+                  (max 0
+                       (+ previous-indent
+                          (* previous-paren-count click-basic-offset)))
+                  nil
+                (when (< 0 previous-paren-count)
+                  ;; foo {
+                  ;;     bar
+                  ;; indent +1 level
+                  (+ previous-indent click-basic-offset)))))))
+    (when indent
+      (indent-line-to indent)
+      indent)))
+
+
+(defun click-paren-count ()
+  "\"({}[\" -> 2
+\"}][]) -> 3
+"
+  (save-excursion
+    (let* ((c 0))
+      (back-to-indentation)
+      (while (not (eolp))
+        (when (looking-at "[{([]")
+          (setq c (1+ c)))
+        (when (looking-at "[})]\\|]")
+          (setq c (1- c)))
+        (forward-char))
+      c)))
 
 (defvar click-basic-offset 4
   "How many spaces to \"correct\" indentation to.
