@@ -50,7 +50,11 @@ We also include
          (or (when (looking-at "#\\|elementclass") (indent-line-to 0) t)
              (click-indent-copycat "\\[")
              (click-indent-copycat "->")
-             (click-indent-copycat "=>")))
+             (click-indent-copycat "=>")
+             (indent-line-to (save-excursion
+                               (click-previous-interesting-line)
+                               (current-indentation)))))
+
        (< (current-column) (current-indentation)))
     (back-to-indentation)))
 
