@@ -247,6 +247,10 @@ Analogous to `c-basic-offset'.")
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.click\\'" . click-mode))
+(add-to-list 'auto-mode-alist '("\\.testie\\'" . click-mode))
+;; you may also want:
+;; (add-to-list 'auto-mode-alist '("\\.template\\'" . click-mode))
+;; (add-to-list 'auto-mode-alist '("\\.inc\\'" . click-mode))
 
 
 (provide 'click-mode)
