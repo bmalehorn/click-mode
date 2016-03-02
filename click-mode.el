@@ -182,6 +182,8 @@ Analogous to `c-basic-offset'.")
   `(
     ;; #define FOO 5
     ("#\\s-*[a-z]*" . font-lock-preprocessor-face)
+    ;; %file foo.click
+    ("^%[a-z]+" . font-lock-keyword-face)
     ;; elementclass
     (,(concat
        "\\(^\\|[^a-zA-Z_0-9.]\\)\\("
