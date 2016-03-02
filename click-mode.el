@@ -191,37 +191,37 @@ Analogous to `c-basic-offset'.")
        "\\)\\([^a-zA-Z_0-9.]\\|$\\)")
      . (2 font-lock-keyword-face))
     ;; Foo(
-    ("\\([a-zA-Z_][a-zA-Z_0-9]*\\)("
+    ("\\([a-zA-Z_][a-zA-Z_/0-9]*\\)("
      . (1 font-lock-function-name-face))
     ;; :: Foo
-    ("::\\s-*\\([a-zA-Z_][a-zA-Z_0-9]*\\)"
+    ("::\\s-*\\([a-zA-Z_][a-zA-Z_/0-9]*\\)"
      . (1 font-lock-function-name-face))
     ;; -> Foo
-    ("->\\s-*\\([A-Z][a-zA-Z_0-9]*\\)"
+    ("->\\s-*\\([A-Z][a-zA-Z_/0-9]*\\)"
      . (1 font-lock-function-name-face))
     ;; Foo ->
-    ("\\([A-Z][a-zA-Z_0-9]*\\)\\s-*->"
+    ("\\([A-Z][a-zA-Z_/0-9]*\\)\\s-*->"
      . (1 font-lock-function-name-face))
     ;; foo
-    ("^\\s-*\\([a-z_][a-zA-Z_0-9]*\\)\\s-*$"
+    ("^\\s-*\\([a-z_][a-zA-Z_/0-9]*\\)\\s-*$"
      . font-lock-variable-name-face)
     ;; foo ::
-    ("\\([a-zA-Z_][a-zA-Z_0-9]*\\) *\\(, *[a-zA-Z_][a-zA-Z_0-9]*\\)* *::"
+    ("\\([a-zA-Z_][a-zA-Z_/0-9]*\\) *\\(, *[a-zA-Z_][a-zA-Z_/0-9]*\\)* *::"
      . (1 font-lock-variable-name-face))
     ;; [0,1,2] foo
-    ("\\(\\[[0-9, ]*\\]\\) *\\([a-z_][a-zA-Z_0-9]*\\)"
+    ("\\(\\[[0-9, ]*\\]\\) *\\([a-z_][a-zA-Z_/0-9]*\\)"
      . (2 font-lock-variable-name-face))
     ;; foo [0,1,2]
-    ("\\([a-z_][a-zA-Z_0-9]*\\) *\\(\\[[0-9, ]*\\]\\)"
+    ("\\([a-z_][a-zA-Z_/0-9]*\\) *\\(\\[[0-9, ]*\\]\\)"
      . (1 font-lock-variable-name-face))
     ;; -> foo
-    ("-> *\\([a-z_][a-zA-Z_0-9]*\\)"
+    ("-> *\\([a-z_][a-zA-Z_/0-9]*\\)"
      . (1 font-lock-variable-name-face))
     ;; foo ->
-    ("\\([a-z_][a-zA-Z_0-9]*\\) *->"
+    ("\\([a-z_][a-zA-Z_/0-9]*\\) *->"
      . (1 font-lock-variable-name-face))
     ;; elementclass Foo {
-    ("elementclass *\\([a-zA-Z_][a-zA-Z_0-9]*\\) "
+    ("elementclass *\\([a-zA-Z_][a-zA-Z_/0-9]*\\) "
      . (1 font-lock-type-face))
     ;; Foo(BAR bar)
     (,(concat "(\\(" click-arguments "\\) ")
