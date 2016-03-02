@@ -30,7 +30,14 @@
   "Syntax table for `click-mode'.")
 
 (defvar click-arguments
-  "[A-Z][A-Z_0-9]*\\|init\\|setq\\|set\\|writeq\\|write\\|goto\\|label\\|end"
+  (concat
+   "append\\|" "end\\|" "error\\|" "errorq\\|" "exit\\|" "export\\|"
+   "exportq\\|" "goto\\|" "init\\|" "initq\\|" "label\\|" "loop\\|"
+   "pause\\|" "print\\|" "printn\\|" "printnq\\|" "printq\\|" "read\\|"
+   "readq\\|" "return\\|" "returnq\\|" "save\\|" "set\\|" "setq\\|"
+   "stop\\|" "wait\\|" "wait_for\\|" "wait_step\\|" "wait_stop\\|"
+   "wait_time\\|" "write\\|" "writeq\\|" "[A-Z][A-Z_0-9]*")
+
   "Argument names for `click-mode', e.g.
     Paint(ANNO FOO, COLOR BAR)
           ----      -----
