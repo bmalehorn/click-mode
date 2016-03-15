@@ -243,7 +243,6 @@ Analogous to `c-basic-offset'.")
 (define-derived-mode click-mode prog-mode "Click"
   (setq comment-start "// ")
   (setq comment-start-skip "//+\\s-*")
-  (set-syntax-table click-mode-syntax-table)
   (set (make-local-variable 'indent-line-function) 'click-indent-line)
   (setq font-lock-defaults '(click-highlights)))
 
