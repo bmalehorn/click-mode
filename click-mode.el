@@ -5,7 +5,7 @@
 ;; license that can be found in the LICENSE.txt file.
 
 ;; Author: Brian Malehorn <bmalehorn@gmail.com>
-;; Version: 0.0.3
+;; Version: 0.0.4
 ;; Package-Requires: ((emacs "24"))
 ;; Keywords: click router
 ;; URL: https://github.com/bmalehorn/click-mode
@@ -231,7 +231,7 @@ Analogous to `c-basic-offset'.")
      . (1 font-lock-constant-face))
     ;; ACTIVE false,
     (,(concat
-       "^\\s-*\\(" click-arguments "\\) .*\\(,\\|);?\\) *$")
+       "^\\s-*\\(" click-arguments "\\) .*\\(,\\|);?\\) *\\(//.*\\)?$")
      . (1 font-lock-constant-face))
     )
 
