@@ -106,9 +106,7 @@ returns nil. Otherwise, returns the new indentation.
                          (looking-at (concat ".*" regexp))))
               (while (not (looking-at regexp))
                 (forward-char))
-              (let* ((bracket (point))
-                     (bol (progn (beginning-of-line) (point))))
-                     (- bracket bol))))))
+              (current-column)))))
     (when indent
       (indent-line-to indent)
       indent)))
