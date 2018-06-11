@@ -72,6 +72,7 @@ We also include
         (click-indent-copycat "->")
         (click-indent-copycat "=>")
         (click-indent-paren)
+        (click-indent-after-semicolon)
         (indent-line-to (save-excursion
                           (click-previous-interesting-line)
                           (current-indentation)))))
@@ -111,7 +112,7 @@ returns nil. Otherwise, returns the new indentation.
       (indent-line-to indent)
       indent)))
 
-(defun click-previous-interesting-line ()
+(defun click-previous-interesting-line (&optional neglect-parens)
   "Moves the point back until reaching a line, skipping blank lines and
 comment lines."
   (forward-line -1)
@@ -121,7 +122,7 @@ comment lines."
   (forward-char -1)
   (while (looking-at "[; ]")
     (forward-char -1))
-  (when (looking-at "[})]\\|]")
+  (when (and (not neglect-parens) (looking-at "[})]\\|]"))
     (end-of-line)
     (backward-list)))
 
@@ -186,6 +187,40 @@ to:
           (setq c (1- c)))
         (forward-char))
       c)))
+
+(defun click-beginning-of-statement-p ()
+  "Did the previous line end with a semicolon?"
+  (save-excursion
+    (click-previous-interesting-line)
+    (beginning-of-line)
+    (looking-at ".*;$")))
+
+(defun click-in-element-class-p ()
+  "If I search backwards, do I find \"elementclass\" before I find a
+0-indentation line?"
+  (save-excursion
+    (let* ((i 0)
+           (ret nil))
+      (while (and i (< i 100))
+        (click-previous-interesting-line t)
+        (beginning-of-line)
+        (if (looking-at "^elementclass")
+            (setq i nil ret t)
+          (when (eq (current-indentation) 0)
+            (setq i nil ret nil))))
+      ret)))
+
+(defun click-indent-after-semicolon ()
+  "If the previous line ended in a semicolon, we're at the start of a
+statement. Indent this to `click-basic-offset' if you're in an
+elementclass, otherwise indent to 0."
+    (when (click-beginning-of-statement-p)
+      (if (click-in-element-class-p)
+          (progn
+            (indent-line-to click-basic-offset)
+            click-basic-offset)
+        (indent-line-to 0)
+        0)))
 
 (defvar click-basic-offset 4
   "How many spaces to \"correct\" indentation to.
